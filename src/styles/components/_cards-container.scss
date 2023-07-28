@@ -6,15 +6,11 @@
     justify-content: center;
 
  
-    @media (min-width: 768px) {
-        .cards__container{
+    @media only screen and  (min-width: 768px) {
             grid-template-columns: repeat(3, 1fr);
-        }
     }
-    @media (min-width: 1200px) {
-        .cards__container{
+    @media only screen and (min-width: 1200px) {
             grid-template-columns: repeat(4, 1fr);
-        }
     }
 }
 
