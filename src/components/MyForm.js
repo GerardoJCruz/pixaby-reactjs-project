@@ -4,11 +4,11 @@ import Alert from './Alert';
 import ImageGrid from './ImageGrid';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
+import PagerContainer from './Pager';
 
 function MyForm() {
     const [searchTerm, setSearchTerm] = useState('');
     const [showAlert, setShowAlert] = useState(false);
-    const [typeAlert, setTypeAlert] = useState(0);
     const [currentPage, setCurrentPage] = useState(1);
     const [images, setImages] = useState([]);
     const [totalPages, setTotalPages] = useState(0);
@@ -73,6 +73,12 @@ function MyForm() {
                 <Alert className="mt-5" typeAlert='0' showAlert={showAlert} />
             </Form>
             {images.length > 0 && <ImageGrid images={images}/>}
+            {images.length > 0 && <PagerContainer 
+                                    totalPages={totalPages}
+                                    currentPage={currentPage}
+                                    setCurrentPage={setCurrentPage}
+                                    fetchData={fetchData}
+                                />}
         </>
     )
 }
