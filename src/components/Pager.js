@@ -1,27 +1,37 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { fetchData } from './MyForm';
 
-function PagerContainer({totalPages, currentPage, setCurrentPage, fetchData}) {
-    const pages = [];
+function Pager({totalPages, searchTerm, setImages, setTotalPages}) {
+    const pages = [];   
+    const [selectedButton, setSelectedButton] = useState(1);
+
     // let pageNumber = 0;
     // Handle Page link click
-    const handlePageClick = (pageNumber) =>{
-        // Update the currentPage state
-        setCurrentPage(pageNumber); 
-        // Consult the api
-        fetchData();
+    const handlePageClick = (event) =>{
+        // Check that the click was made on an <button> tag
+        if(event.target.tagName === 'BUTTON'){
+            //Get the page number from the button
+            const pageNumber = parseInt(event.target.textContent);
+            
+            //Set the selected button
+            setSelectedButton(pageNumber);
+            
+            // Consult the api
+            fetchData(searchTerm, pageNumber, setImages, setTotalPages);
+        }
+
     };
 
-
     for(let i = 0; i < totalPages ; i++){
-        pages.push(<button key={i+1} onClick={()=>{handlePageClick(i+1)}} className='text-decoration-none'>{i+1}</button>)
+        pages.push(<button key={i+1}  className={selectedButton === i+1? 'highlight' : ''}>{i+1}</button>)
     }
     
     return (
-        <div className='pager list-unstyled d-flex gap-3 justify-content-center my-5 flex-wrap'>
+        <div id='pager' className='pager list-unstyled d-flex gap-3 justify-content-center my-5 flex-wrap' onClick={handlePageClick}>
             {pages}
         </div>
     )
 }
 
-export default PagerContainer
+export default Pager
 

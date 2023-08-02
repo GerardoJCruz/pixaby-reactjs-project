@@ -4,12 +4,20 @@ import Alert from './Alert';
 import ImageGrid from './ImageGrid';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-import PagerContainer from './Pager';
+import Pager from './Pager';
+
+  // Consult Api through the class api and its method
+export const fetchData = async (searchTerm, setPage, setImages, setTotalPages) => {
+    const api = new ConsultApi(searchTerm, setPage);
+    const data = await api.consult();
+
+    setImages(data.hits);
+    setTotalPages(Math.ceil((data.totalHits) / 20));
+}
 
 function MyForm() {
     const [searchTerm, setSearchTerm] = useState('');
     const [showAlert, setShowAlert] = useState(false);
-    const [currentPage, setCurrentPage] = useState(1);
     const [images, setImages] = useState([]);
     const [totalPages, setTotalPages] = useState(0);
 
@@ -24,18 +32,10 @@ function MyForm() {
         }
         setShowAlert(false);
 
-        setCurrentPage(1);
-        fetchData();
+        fetchData(searchTerm, 1, setImages, setTotalPages);
     }
 
-    // Consult Api through the class api and its method
-    const fetchData = async () => {
-        const api = new ConsultApi(searchTerm, currentPage);
-        const data = await api.consult();
-
-        setImages(data.hits);
-        setTotalPages(Math.ceil((data.totalHits) / 20));
-    }
+  
 
     useEffect(() => {
         let timer;
@@ -73,11 +73,11 @@ function MyForm() {
                 <Alert className="mt-5" typeAlert='0' showAlert={showAlert} />
             </Form>
             {images.length > 0 && <ImageGrid images={images}/>}
-            {images.length > 0 && <PagerContainer 
+            {images.length > 0 && <Pager 
                                     totalPages={totalPages}
-                                    currentPage={currentPage}
-                                    setCurrentPage={setCurrentPage}
-                                    fetchData={fetchData}
+                                    searchTerm={searchTerm}
+                                    setImages={setImages}
+                                    setTotalPages={setTotalPages}
                                 />}
         </>
     )
